@@ -3,12 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Loading - Rohit Sharma Portfolio">
     <title>Loading...</title>
     <style>
+        :root {
+            --primary-bg: #000;
+            --text-primary: #fff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --accent-glow: rgba(255, 255, 255, 0.05);
+            --loader-size: clamp(40px, 8vw, 60px);
+            --container-padding: max(20px, 4vw);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            background: #000;
+            background: var(--primary-bg);
             overflow: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .loading-screen {
@@ -18,9 +37,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #000;
+            background: var(--primary-bg);
             z-index: 9999;
-            padding: 20px;
+            padding: var(--container-padding);
         }
 
         .loading-section {
@@ -30,139 +49,138 @@
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.5s ease-out;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: opacity;
         }
 
         .loader-circle {
-            width: clamp(40px, 8vw, 60px);
-            height: clamp(40px, 8vw, 60px);
+            width: var(--loader-size);
+            height: var(--loader-size);
             border: min(3px, 0.5vw) solid rgba(255, 255, 255, 0.1);
-            border-top-color: #fff;
+            border-top-color: var(--text-primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            will-change: transform;
         }
 
-        .loader-text {
-            display: flex;
-            justify-content: center;
-            gap: min(4px, 1vw);
-            flex-wrap: wrap;
-            padding: 0 10px;
-            text-align: center;
-        }
-
-        .loader-text span {
-            color: #fff;
-            font-size: clamp(16px, 4vw, 24px);
-            font-weight: 500;
-            opacity: 0;
-            transform: translateY(10px);
-            animation: fadeInUp 0.3s ease forwards;
-        }
-
-        .progress-bar {
-            width: min(200px, 80vw);
-            height: min(3px, 1vw);
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress {
-            width: 0%;
-            height: 100%;
-            background: #fff;
-            transition: width 0.5s ease-out;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Redesigned creative text styles */
+        /* Enhanced Creative Text Styles */
         .creative-text {
             text-align: center;
-            color: #fff;
-            margin-top: 80px;
+            color: var(--text-primary);
+            margin-top: clamp(60px, 10vh, 80px);
             display: flex;
             flex-direction: column;
-            gap: 40px;
-            max-width: 90vw;
+            gap: clamp(20px, 4vh, 40px);
+            max-width: min(90vw, 600px);
             pointer-events: none;
         }
 
         .creative-text div {
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.5s ease forwards;
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             position: relative;
-            padding: 15px;
+            padding: clamp(12px, 2vw, 15px) clamp(15px, 3vw, 20px);
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--accent-glow);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .creative-text div:hover {
+            transform: translateY(-2px);
         }
 
         .creative-text .emoji {
             position: absolute;
-            left: 0;
+            left: clamp(12px, 2vw, 15px);
             top: 50%;
             transform: translateY(-50%);
-            font-size: clamp(24px, 5vw, 32px);
-            margin-left: 15px;
-            opacity: 0.9;
+            font-size: clamp(20px, 4vw, 28px);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
         }
 
         .creative-text .text {
-            font-size: clamp(14px, 2.5vw, 18px);
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            line-height: 1.4;
-            margin-left: 45px;
+            font-size: clamp(14px, 2.5vw, 16px);
+            color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            line-height: 1.5;
+            margin-left: clamp(35px, 8vw, 45px);
             text-align: left;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
-        /* Refined animation delays */
-        .creative-text div:nth-child(1) {
-            animation-delay: 0.2s;
-            transform: translateX(-10px);
-        }
-        .creative-text div:nth-child(2) {
-            animation-delay: 0.4s;
-            transform: translateX(10px);
-        }
-        .creative-text div:nth-child(3) {
-            animation-delay: 0.6s;
-            transform: translateX(-10px);
+        /* Progress Bar Styles */
+        .progress-bar {
+            width: min(250px, 80vw);
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
         }
 
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #fff, rgba(255, 255, 255, 0.8));
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: width;
+        }
+
+        /* Refined Animations */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced Mobile Optimization */
         @media (max-width: 480px) {
             .creative-text {
-                margin-top: 60px;
-                gap: 20px;
+                margin-top: 50px;
+                gap: 16px;
             }
-            
+
             .creative-text div {
-                padding: 12px;
+                padding: 12px 15px;
             }
-            
-            .creative-text .emoji {
-                font-size: 20px;
-                margin-left: 12px;
-            }
-            
+
             .creative-text .text {
-                margin-left: 40px;
                 font-size: 14px;
+                margin-left: 35px;
+            }
+
+            .creative-text .emoji {
+                font-size: 18px;
+            }
+        }
+
+        /* Prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+            .loader-circle,
+            .creative-text div {
+                animation: none;
+            }
+
+            .creative-text div {
+                opacity: 1;
+                transform: none;
+            }
+
+            .progress {
+                transition: none;
             }
         }
     </style>
@@ -181,19 +199,13 @@
                     <span class="text">Crafting UIs that spark joy</span>
                 </div>
                 <div>
-                    <span class="emoji">🎯</span>
+                    <span class="emoji">🎨</span>
                     <span class="text">404: Bad designs not found</span>
                 </div>
             </div>
         </div>
         
         <div class="loading-section" id="section2">
-            <div class="loader-text">
-                <span>C</span><span>O</span><span>N</span><span>N</span><span>E</span><span>C</span><span>T</span><span>I</span><span>N</span><span>G</span>
-            </div>
-        </div>
-        
-        <div class="loading-section" id="section3">
             <div class="progress-bar">
                 <div class="progress"></div>
             </div>
@@ -205,25 +217,20 @@
             const sections = document.querySelectorAll('.loading-section');
             const progress = document.querySelector('.progress');
             
-            // Show first section immediately
+            // Performance optimization
             sections[0].style.opacity = '1';
             
-            // Increase timing to allow reading the creative text
+            // Simplified timeline
             setTimeout(() => {
                 sections[0].style.opacity = '0';
                 sections[1].style.opacity = '1';
-            }, 2000);  // Increased from 1000
-            
-            setTimeout(() => {
-                sections[1].style.opacity = '0';
-                sections[2].style.opacity = '1';
                 progress.style.width = '100%';
-            }, 3000);  // Increased from 2000
+            }, 2500);
             
             setTimeout(() => {
                 window.location.href = 'index.html';
-            }, 4000);  // Increased from 3000
-        });
+            }, 3500);
+        }, { passive: true });
     </script>
 </body>
 </html> 
