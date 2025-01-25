@@ -20,6 +20,7 @@
             --container-padding: max(20px, 4vw);
             --card-bg: rgba(255, 255, 255, 0.03);
             --card-border: rgba(255, 255, 255, 0.05);
+            --accent-color: #00ff88;
         }
 
         /* Reset and base styles */
@@ -76,11 +77,12 @@
             width: var(--loader-size);
             height: var(--loader-size);
             border: min(3px, 0.5vw) solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--text-primary);
+            border-top-color: var(--accent-color);
             border-radius: 50%;
             animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             will-change: transform;
             transform: translateZ(0);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
         }
 
         /* Creative text container */
@@ -230,6 +232,81 @@
                 transition: none;
             }
         }
+
+        /* Enhanced Loading Animation */
+        .connecting-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-primary);
+            font-size: clamp(20px, 4vw, 32px);
+            font-weight: 500;
+            letter-spacing: 2px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .connecting-text .dots {
+            display: inline-block;
+            width: 24px;
+            text-align: left;
+        }
+
+        .connecting-text .dot {
+            opacity: 0;
+            animation: dotFade 1.4s infinite;
+            margin-left: 2px;
+        }
+
+        .connecting-text .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .connecting-text .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .connection-lines {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .connection-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            height: 1px;
+            width: 100%;
+            animation: lineMove 2s linear infinite;
+        }
+
+        .connection-line:nth-child(1) { top: 25%; animation-delay: 0s; }
+        .connection-line:nth-child(2) { top: 45%; animation-delay: 0.5s; }
+        .connection-line:nth-child(3) { top: 65%; animation-delay: 1s; }
+        .connection-line:nth-child(4) { top: 85%; animation-delay: 1.5s; }
+
+        @keyframes lineMove {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes dotFade {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -237,8 +314,21 @@
         <meta http-equiv="refresh" content="0;url=index.html">
     </noscript>
     <div class="loading-screen">
+        <div class="connection-lines">
+            <div class="connection-line"></div>
+            <div class="connection-line"></div>
+            <div class="connection-line"></div>
+            <div class="connection-line"></div>
+        </div>
+
         <div class="loading-section" id="section1">
             <div class="loader-circle"></div>
+            <div class="connecting-text">
+                CONNECTING<span class="dots"><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></span>
+            </div>
+        </div>
+        
+        <div class="loading-section" id="section2">
             <div class="creative-text">
                 <div>
                     <span class="emoji">⚡</span>
@@ -255,7 +345,7 @@
             </div>
         </div>
         
-        <div class="loading-section" id="section2">
+        <div class="loading-section" id="section3">
             <div class="progress-bar">
                 <div class="progress"></div>
             </div>
@@ -263,32 +353,40 @@
     </div>
 
     <script>
-        // Add this before the existing DOMContentLoaded listener
-        if (sessionStorage.getItem('visited')) {
-            window.location.href = 'index.html';
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            // Set visited flag
-            sessionStorage.setItem('visited', 'true');
-            
+            if (sessionStorage.getItem('visited')) {
+                window.location.href = 'index.html';
+                return;
+            }
+
             const sections = document.querySelectorAll('.loading-section');
             const progress = document.querySelector('.progress');
+            const connectingText = document.querySelector('.connecting-text');
+            const connectionLines = document.querySelector('.connection-lines');
             
-            // Set flag for index.html
+            // Set flags
+            sessionStorage.setItem('visited', 'true');
             sessionStorage.setItem('fromLoader', 'true');
             
-            // Show first section immediately
+            // Initial state
             sections[0].style.opacity = '1';
+            connectingText.style.opacity = '1';
+            connectionLines.style.opacity = '1';
             
-            // Simplified timeline with smooth transitions
+            // Loading sequence
             setTimeout(() => {
+                connectingText.style.opacity = '0';
+                connectionLines.style.opacity = '0';
                 sections[0].style.opacity = '0';
                 sections[1].style.opacity = '1';
-                progress.style.width = '100%';
-            }, 2500);
+            }, 2000);
             
-            // Transition to index.html
+            setTimeout(() => {
+                sections[1].style.opacity = '0';
+                sections[2].style.opacity = '1';
+                progress.style.width = '100%';
+            }, 4000);
+            
             setTimeout(() => {
                 document.body.style.opacity = '0';
                 document.body.style.transition = 'opacity 0.3s ease-out';
@@ -296,7 +394,7 @@
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 300);
-            }, 3500);
+            }, 5000);
         }, { passive: true });
     </script>
 </body>
