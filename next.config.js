@@ -2,17 +2,23 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  // Ensure static HTML export
-  output: 'export',
-  // Configure image domains if needed
   images: {
-    domains: ['your-domain.com'],
-    unoptimized: true
+    unoptimized: true,
+    domains: ['your-domain.com']
   },
-  // Disable server components for static export
+  // Disable features that might cause build issues
   experimental: {
-    appDir: false
-  }
+    appDir: false,
+    serverComponents: false
+  },
+  // Specify the export
+  output: 'export',
+  // Disable server-side features
+  target: 'serverless',
+  // Add trailing slash to URLs
+  trailingSlash: true,
+  // Disable source maps in production
+  productionBrowserSourceMaps: false
 }
 
 module.exports = nextConfig 
