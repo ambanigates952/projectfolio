@@ -3,54 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rohit Sharma - Creative Director & Product Designer">
+    <meta name="theme-color" content="#000000">
     <title>Rohit Sharma - Product Designer</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="styles.css" as="style">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
-        /* Add these styles at the top of your existing styles */
-        body.loading {
-            opacity: 0;
-            visibility: hidden;
+        /* Critical CSS */
+        :root {
+            --primary-bg: #000;
+            --text-primary: #fff;
+            --accent-color: #00ff88;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .page-transition {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .page-transition.loaded {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Optimize for reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            body,
-            .page-transition {
-                animation: none;
-                transition: opacity 0.1s ease-out;
-                transform: none;
-            }
-        }
-
-        /* Add to your existing styles */
-        body {
-            opacity: 0;
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* Loading overlay */
+        /* Loading styles */
         .loading-overlay {
             position: fixed;
             inset: 0;
-            background: #000;
+            background: var(--primary-bg);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -71,38 +52,50 @@
         }
 
         .loader-circle {
-            width: 60px;
-            height: 60px;
+            width: clamp(40px, 8vw, 60px);
+            height: clamp(40px, 8vw, 60px);
             border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top-color: #fff;
+            border-top-color: var(--accent-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         .loader-text {
-            color: #fff;
-            font-size: 18px;
+            color: var(--text-primary);
+            font-size: clamp(16px, 4vw, 18px);
             letter-spacing: 2px;
             font-family: 'Inter', sans-serif;
+        }
+
+        /* Content visibility */
+        .page-content {
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .page-content.visible {
+            opacity: 1;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* Hide main content initially */
-        .page-content {
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-        }
-
-        .page-content.visible {
-            opacity: 1;
+        /* Optimize for reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .loader-circle {
+                animation: none;
+            }
+            
+            .loading-overlay,
+            .page-content {
+                transition: opacity 0.1s ease-out;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Add loading overlay -->
+    <!-- Loading overlay -->
     <div class="loading-overlay">
         <div class="loader">
             <div class="loader-circle"></div>
@@ -110,7 +103,7 @@
         </div>
     </div>
 
-    <!-- Wrap existing content -->
+    <!-- Main content -->
     <div class="page-content">
         <!-- Navigation -->
         <nav class="navbar">
@@ -312,13 +305,13 @@
                         <h3 class="footer-title gradient-text">rohit.dev</h3>
                         <p class="footer-tagline">Crafting digital experiences that matter</p>
                         <div class="social-links">
-                            <a href="https://dribbble.com/birdieffect_studios" target="_blank" class="social-link">
+                            <a href="https://dribbble.com/birdieffect_studios" target="_blank" rel="noopener" class="social-link">
                                 <i class="fab fa-dribbble"></i>
                             </a>
-                            <a href="https://www.linkedin.com/in/rohit-sharma-18750b261/" target="_blank" class="social-link">
+                            <a href="https://www.linkedin.com/in/rohit-sharma-18750b261/" target="_blank" rel="noopener" class="social-link">
                                 <i class="fab fa-linkedin"></i>
                             </a>
-                            <a href="https://github.com/ambanigates952" target="_blank" class="social-link">
+                            <a href="https://github.com/ambanigates952" target="_blank" rel="noopener" class="social-link">
                                 <i class="fab fa-github"></i>
                             </a>
                         </div>
@@ -370,23 +363,33 @@
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Scripts -->
+    <script defer src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const overlay = document.querySelector('.loading-overlay');
             const content = document.querySelector('.page-content');
 
-            // Simulate loading time
-            setTimeout(() => {
+            // Function to handle loading completion
+            const completeLoading = () => {
                 overlay.classList.add('fade-out');
                 content.classList.add('visible');
                 
-                // Remove overlay after animation
                 setTimeout(() => {
                     overlay.remove();
                 }, 500);
-            }, 2000);
-        });
+            };
+
+            // Check if page is already loaded
+            if (document.readyState === 'complete') {
+                completeLoading();
+            } else {
+                window.addEventListener('load', completeLoading);
+            }
+
+            // Fallback in case load event doesn't fire
+            setTimeout(completeLoading, 2500);
+        }, { passive: true });
     </script>
 </body>
 </html> 
