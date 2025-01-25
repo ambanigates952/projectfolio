@@ -798,6 +798,49 @@
             50% { transform: translate(-5%, 10%) scale(0.9); }
             75% { transform: translate(-10%, -5%) scale(1.05); }
         }
+
+        /* Animated text styles */
+        .hero-description {
+            margin-top: 1.5rem;
+            min-height: 30px;
+        }
+
+        .animated-text {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: 500;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .text-rotate {
+            background: linear-gradient(45deg, var(--accent-color), #00ffcc, #00ccff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradient 8s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Optimize existing animations */
+        .hero-content > * {
+            will-change: transform, opacity;
+        }
+
+        .gradient-orb {
+            will-change: transform;
+            contain: paint;
+        }
+
+        .card {
+            will-change: transform;
+            contain: layout paint;
+        }
     </style>
 </head>
 <body>
@@ -861,7 +904,9 @@
                 </div>
 
                 <div class="hero-description">
-                    <p class="typing-text"></p>
+                    <p class="animated-text">
+                        <span class="text-rotate"></span>
+                    </p>
                 </div>
 
                 <div class="skill-showcase">
@@ -1174,6 +1219,69 @@
             // Observe sections for scroll animations
             document.querySelectorAll('.about-section, .connect-section, .footer')
                 .forEach(section => observer.observe(section));
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const texts = [
+                "Turning ideas into exceptional digital experiences",
+                "Crafting user-centric designs with precision",
+                "Building the future of web, one pixel at a time",
+                "Where creativity meets functionality"
+            ];
+            
+            const textRotate = document.querySelector('.text-rotate');
+            let currentIndex = 0;
+            
+            const updateText = () => {
+                textRotate.style.opacity = '0';
+                setTimeout(() => {
+                    textRotate.textContent = texts[currentIndex];
+                    textRotate.style.opacity = '1';
+                    currentIndex = (currentIndex + 1) % texts.length;
+                }, 500);
+            };
+
+            // Initial text
+            updateText();
+            
+            // Rotate text every 4 seconds
+            setInterval(updateText, 4000);
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Optimize loading
+            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+            if ('loading' in HTMLImageElement.prototype) {
+                lazyImages.forEach(img => {
+                    img.src = img.dataset.src;
+                });
+            } else {
+                // Fallback for browsers that don't support lazy loading
+                const lazyLoadScript = document.createElement('script');
+                lazyLoadScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+                document.body.appendChild(lazyLoadScript);
+            }
+
+            // Debounce scroll events
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                if (scrollTimeout) {
+                    window.cancelAnimationFrame(scrollTimeout);
+                }
+                scrollTimeout = window.requestAnimationFrame(() => {
+                    // Your scroll handling code
+                });
+            }, { passive: true });
+
+            // Optimize animations
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            if (reducedMotion.matches) {
+                document.documentElement.style.setProperty('--transition-smooth', 'none');
+            }
         });
     </script>
 </body>
