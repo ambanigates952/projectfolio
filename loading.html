@@ -20,6 +20,7 @@
             align-items: center;
             background: #000;
             z-index: 9999;
+            padding: 20px;
         }
 
         .loading-section {
@@ -33,9 +34,9 @@
         }
 
         .loader-circle {
-            width: 60px;
-            height: 60px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
+            width: clamp(40px, 8vw, 60px);
+            height: clamp(40px, 8vw, 60px);
+            border: min(3px, 0.5vw) solid rgba(255, 255, 255, 0.1);
             border-top-color: #fff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -44,12 +45,15 @@
         .loader-text {
             display: flex;
             justify-content: center;
-            gap: 4px;
+            gap: min(4px, 1vw);
+            flex-wrap: wrap;
+            padding: 0 10px;
+            text-align: center;
         }
 
         .loader-text span {
             color: #fff;
-            font-size: 24px;
+            font-size: clamp(16px, 4vw, 24px);
             font-weight: 500;
             opacity: 0;
             transform: translateY(10px);
@@ -57,8 +61,8 @@
         }
 
         .progress-bar {
-            width: 200px;
-            height: 3px;
+            width: min(200px, 80vw);
+            height: min(3px, 1vw);
             background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
             overflow: hidden;
@@ -81,12 +85,106 @@
                 transform: translateY(0);
             }
         }
+
+        /* Redesigned creative text styles */
+        .creative-text {
+            text-align: center;
+            color: #fff;
+            margin-top: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 90vw;
+            pointer-events: none;
+        }
+
+        .creative-text div {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+            position: relative;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .creative-text .emoji {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: clamp(24px, 5vw, 32px);
+            margin-left: 15px;
+            opacity: 0.9;
+        }
+
+        .creative-text .text {
+            font-size: clamp(14px, 2.5vw, 18px);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            margin-left: 45px;
+            text-align: left;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Refined animation delays */
+        .creative-text div:nth-child(1) {
+            animation-delay: 0.2s;
+            transform: translateX(-10px);
+        }
+        .creative-text div:nth-child(2) {
+            animation-delay: 0.4s;
+            transform: translateX(10px);
+        }
+        .creative-text div:nth-child(3) {
+            animation-delay: 0.6s;
+            transform: translateX(-10px);
+        }
+
+        @media (max-width: 480px) {
+            .creative-text {
+                margin-top: 60px;
+                gap: 20px;
+            }
+            
+            .creative-text div {
+                padding: 12px;
+            }
+            
+            .creative-text .emoji {
+                font-size: 20px;
+                margin-left: 12px;
+            }
+            
+            .creative-text .text {
+                margin-left: 40px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="loading-screen">
         <div class="loading-section" id="section1">
             <div class="loader-circle"></div>
+            <div class="creative-text">
+                <div>
+                    <span class="emoji">⚡</span>
+                    <span class="text">Making pixels dance & functions sing</span>
+                </div>
+                <div>
+                    <span class="emoji">✨</span>
+                    <span class="text">Crafting UIs that spark joy</span>
+                </div>
+                <div>
+                    <span class="emoji">🎯</span>
+                    <span class="text">404: Bad designs not found</span>
+                </div>
+            </div>
         </div>
         
         <div class="loading-section" id="section2">
@@ -110,23 +208,21 @@
             // Show first section immediately
             sections[0].style.opacity = '1';
             
-            // After 1 second, show second section
+            // Increase timing to allow reading the creative text
             setTimeout(() => {
                 sections[0].style.opacity = '0';
                 sections[1].style.opacity = '1';
-            }, 1000);
+            }, 2000);  // Increased from 1000
             
-            // After 2 seconds, show progress bar
             setTimeout(() => {
                 sections[1].style.opacity = '0';
                 sections[2].style.opacity = '1';
                 progress.style.width = '100%';
-            }, 2000);
+            }, 3000);  // Increased from 2000
             
-            // After 3 seconds, redirect to main website
             setTimeout(() => {
                 window.location.href = 'index.html';
-            }, 3000);
+            }, 4000);  // Increased from 3000
         });
     </script>
 </body>
