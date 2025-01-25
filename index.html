@@ -197,6 +197,118 @@
                 background: rgba(0, 0, 0, 0.6);
             }
         }
+
+        .creative-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            perspective: 1000px;
+        }
+
+        .card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.06),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .card-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .card-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at center,
+                var(--accent-color) 0%,
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        .card:hover .card-glow {
+            opacity: 0.1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Add mouse move effect */
+        @media (hover: hover) {
+            .card {
+                transition: transform 0.2s ease;
+            }
+            
+            .card:hover {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 768px) {
+            .creative-cards {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .card-icon {
+                font-size: 2.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -329,6 +441,32 @@
                                 <div class="code-line">};</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="creative-cards">
+                <div class="card" data-tilt>
+                    <div class="card-content">
+                        <div class="card-icon">✨</div>
+                        <h3 class="card-title">Making pixels dance & functions sing</h3>
+                        <div class="card-glow"></div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tilt>
+                    <div class="card-content">
+                        <div class="card-icon">🚀</div>
+                        <h3 class="card-title">Crafting UIs that spark joy</h3>
+                        <div class="card-glow"></div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tilt>
+                    <div class="card-content">
+                        <div class="card-icon">💫</div>
+                        <h3 class="card-title">404: Bad designs not found</h3>
+                        <div class="card-glow"></div>
                     </div>
                 </div>
             </div>
@@ -466,6 +604,23 @@
             // Fallback in case load event doesn't fire
             setTimeout(completeLoading, 2500);
         }, { passive: true });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        });
     </script>
 </body>
 </html> 
