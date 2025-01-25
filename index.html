@@ -92,6 +92,111 @@
                 transition: opacity 0.1s ease-out;
             }
         }
+
+        /* Navbar styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1rem var(--container-padding);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            position: relative;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            padding: 0.5rem 0;
+        }
+
+        .nav-dot {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .nav-link:hover .nav-dot {
+            opacity: 1;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            padding: 0.5rem;
+            transition: var(--transition-smooth);
+        }
+
+        .theme-toggle:hover {
+            color: var(--accent-color);
+        }
+
+        /* Remove mobile menu button */
+        .mobile-menu-button {
+            display: none;
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem var(--container-padding);
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-link {
+                font-size: 0.9rem;
+            }
+
+            .theme-toggle {
+                font-size: 1rem;
+            }
+        }
+
+        /* Ensure navbar is always visible on scroll */
+        @supports (backdrop-filter: blur(10px)) {
+            .navbar {
+                background: rgba(0, 0, 0, 0.6);
+            }
+        }
     </style>
 </head>
 <body>
@@ -109,11 +214,6 @@
         <nav class="navbar">
             <div class="nav-container">
                 <a href="/" class="logo">rohit.dev</a>
-                <button class="mobile-menu-button" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
                 <div class="nav-links">
                     <a href="#connect" class="nav-link">
                         <span class="nav-text">Contact</span>
@@ -227,30 +327,6 @@
                                     <span class="code-string">"Debug mode: ON 🐛"</span>,
                                 </div>
                                 <div class="code-line">};</div>
-                            </div>
-                            
-                            <div class="feature-grid">
-                                <div class="feature-item glowing">
-                                    <div class="feature-icon-wrapper">
-                                        <span class="feature-icon">🎯</span>
-                                        <div class="glow-effect"></div>
-                                    </div>
-                                    <p>Making pixels dance & functions sing</p>
-                                </div>
-                                <div class="feature-item glowing">
-                                    <div class="feature-icon-wrapper">
-                                        <span class="feature-icon">🚀</span>
-                                        <div class="glow-effect"></div>
-                                    </div>
-                                    <p>Crafting UIs that spark joy</p>
-                                </div>
-                                <div class="feature-item glowing">
-                                    <div class="feature-icon-wrapper">
-                                        <span class="feature-icon">💡</span>
-                                        <div class="glow-effect"></div>
-                                    </div>
-                                    <p>404: Bad designs not found</p>
-                                </div>
                             </div>
                         </div>
                     </div>
