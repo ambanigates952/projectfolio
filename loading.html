@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            z-index: 9999;
+        }
+
+        .loading-section {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader-circle {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-text {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .loader-text span {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.3s ease forwards;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: #fff;
+            transition: width 0.5s ease-out;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen">
+        <div class="loading-section" id="section1">
+            <div class="loader-circle"></div>
+        </div>
+        
+        <div class="loading-section" id="section2">
+            <div class="loader-text">
+                <span>C</span><span>O</span><span>N</span><span>N</span><span>E</span><span>C</span><span>T</span><span>I</span><span>N</span><span>G</span>
+            </div>
+        </div>
+        
+        <div class="loading-section" id="section3">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.loading-section');
+            const progress = document.querySelector('.progress');
+            
+            // Show first section immediately
+            sections[0].style.opacity = '1';
+            
+            // After 1 second, show second section
+            setTimeout(() => {
+                sections[0].style.opacity = '0';
+                sections[1].style.opacity = '1';
+            }, 1000);
+            
+            // After 2 seconds, show progress bar
+            setTimeout(() => {
+                sections[1].style.opacity = '0';
+                sections[2].style.opacity = '1';
+                progress.style.width = '100%';
+            }, 2000);
+            
+            // After 3 seconds, redirect to main website
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 3000);
+        });
+    </script>
+</body>
+</html> 
