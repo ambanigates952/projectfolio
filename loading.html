@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <meta name="description" content="Loading - Rohit Sharma Portfolio">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preload" href="index.html" as="document">
     <title>Loading...</title>
     <style>
         :root {
@@ -13,12 +18,16 @@
             --accent-glow: rgba(255, 255, 255, 0.05);
             --loader-size: clamp(40px, 8vw, 60px);
             --container-padding: max(20px, 4vw);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.05);
         }
 
+        /* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -28,8 +37,11 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            touch-action: manipulation;
         }
 
+        /* Loading screen container */
         .loading-screen {
             position: fixed;
             inset: 0;
@@ -40,8 +52,12 @@
             background: var(--primary-bg);
             z-index: 9999;
             padding: var(--container-padding);
+            min-height: 100dvh; /* Dynamic viewport height */
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
+        /* Loading sections */
         .loading-section {
             position: absolute;
             inset: 0;
@@ -50,9 +66,12 @@
             align-items: center;
             opacity: 0;
             transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: opacity;
+            will-change: opacity, transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
+        /* Loader circle */
         .loader-circle {
             width: var(--loader-size);
             height: var(--loader-size);
@@ -61,48 +80,57 @@
             border-radius: 50%;
             animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             will-change: transform;
+            transform: translateZ(0);
         }
 
-        /* Enhanced Creative Text Styles */
+        /* Creative text container */
         .creative-text {
             text-align: center;
             color: var(--text-primary);
-            margin-top: clamp(60px, 10vh, 80px);
+            margin-top: min(80px, 15vh);
             display: flex;
             flex-direction: column;
-            gap: clamp(20px, 4vh, 40px);
+            gap: min(40px, 5vh);
             max-width: min(90vw, 600px);
             pointer-events: none;
+            transform: translateZ(0);
         }
 
+        /* Creative text cards */
         .creative-text div {
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             position: relative;
-            padding: clamp(12px, 2vw, 15px) clamp(15px, 3vw, 20px);
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
+            padding: clamp(12px, 2.5vw, 18px) clamp(15px, 3vw, 25px);
+            background: var(--card-bg);
+            border-radius: clamp(12px, 2vw, 16px);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--accent-glow);
+            border: 1px solid var(--card-border);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+            transform: translateZ(0);
+            touch-action: pan-x pan-y;
         }
 
-        .creative-text div:hover {
-            transform: translateY(-2px);
+        @media (hover: hover) {
+            .creative-text div:hover {
+                transform: translateY(-2px);
+            }
         }
 
+        /* Emoji styles */
         .creative-text .emoji {
             position: absolute;
-            left: clamp(12px, 2vw, 15px);
+            left: clamp(12px, 2.5vw, 18px);
             top: 50%;
             transform: translateY(-50%);
-            font-size: clamp(20px, 4vw, 28px);
+            font-size: clamp(18px, 4vw, 24px);
             filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
         }
 
+        /* Text styles */
         .creative-text .text {
             font-size: clamp(14px, 2.5vw, 16px);
             color: var(--text-secondary);
@@ -111,63 +139,81 @@
             line-height: 1.5;
             margin-left: clamp(35px, 8vw, 45px);
             text-align: left;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
 
-        /* Progress Bar Styles */
+        /* Progress bar */
         .progress-bar {
-            width: min(250px, 80vw);
-            height: 4px;
+            width: min(280px, 85vw);
+            height: min(4px, 1vh);
             background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
             overflow: hidden;
+            transform: translateZ(0);
         }
 
         .progress {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #fff, rgba(255, 255, 255, 0.8));
+            background: linear-gradient(90deg, var(--text-primary), rgba(255, 255, 255, 0.8));
             transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             will-change: width;
+            transform: translateZ(0);
         }
 
-        /* Refined Animations */
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Enhanced Mobile Optimization */
+        /* Mobile optimization */
         @media (max-width: 480px) {
             .creative-text {
-                margin-top: 50px;
-                gap: 16px;
+                margin-top: min(50px, 10vh);
+                gap: min(16px, 3vh);
             }
 
             .creative-text div {
                 padding: 12px 15px;
+                border-radius: 12px;
             }
 
             .creative-text .text {
                 font-size: 14px;
-                margin-left: 35px;
+                margin-left: 32px;
+                line-height: 1.4;
             }
 
             .creative-text .emoji {
-                font-size: 18px;
+                font-size: 16px;
+                left: 10px;
             }
         }
 
-        /* Prefers-reduced-motion */
+        /* Tablet optimization */
+        @media (min-width: 481px) and (max-width: 1024px) {
+            .creative-text {
+                margin-top: min(60px, 12vh);
+                gap: min(24px, 4vh);
+            }
+        }
+
+        /* Landscape mode optimization */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .creative-text {
+                margin-top: 20px;
+                gap: 12px;
+            }
+
+            .creative-text div {
+                padding: 8px 12px;
+            }
+        }
+
+        /* High-DPI screens */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .creative-text div {
+                border-width: 0.5px;
+            }
+        }
+
+        /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
             .loader-circle,
             .creative-text div {
@@ -179,13 +225,17 @@
                 transform: none;
             }
 
-            .progress {
+            .progress,
+            .creative-text div {
                 transition: none;
             }
         }
     </style>
 </head>
 <body>
+    <noscript>
+        <meta http-equiv="refresh" content="0;url=index.html">
+    </noscript>
     <div class="loading-screen">
         <div class="loading-section" id="section1">
             <div class="loader-circle"></div>
@@ -213,22 +263,39 @@
     </div>
 
     <script>
+        // Add this before the existing DOMContentLoaded listener
+        if (sessionStorage.getItem('visited')) {
+            window.location.href = 'index.html';
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Set visited flag
+            sessionStorage.setItem('visited', 'true');
+            
             const sections = document.querySelectorAll('.loading-section');
             const progress = document.querySelector('.progress');
             
-            // Performance optimization
+            // Set flag for index.html
+            sessionStorage.setItem('fromLoader', 'true');
+            
+            // Show first section immediately
             sections[0].style.opacity = '1';
             
-            // Simplified timeline
+            // Simplified timeline with smooth transitions
             setTimeout(() => {
                 sections[0].style.opacity = '0';
                 sections[1].style.opacity = '1';
                 progress.style.width = '100%';
             }, 2500);
             
+            // Transition to index.html
             setTimeout(() => {
-                window.location.href = 'index.html';
+                document.body.style.opacity = '0';
+                document.body.style.transition = 'opacity 0.3s ease-out';
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 300);
             }, 3500);
         }, { passive: true });
     </script>
