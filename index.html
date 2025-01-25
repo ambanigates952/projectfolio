@@ -45,11 +45,73 @@
         @keyframes fadeIn {
             to { opacity: 1; }
         }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .loader-circle {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-text {
+            color: #fff;
+            font-size: 18px;
+            letter-spacing: 2px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hide main content initially */
+        .page-content {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .page-content.visible {
+            opacity: 1;
+        }
     </style>
 </head>
-<body class="loading">
-    <!-- Add this div wrapper around all existing content -->
-    <div class="page-transition">
+<body>
+    <!-- Add loading overlay -->
+    <div class="loading-overlay">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-text">LOADING...</div>
+        </div>
+    </div>
+
+    <!-- Wrap existing content -->
+    <div class="page-content">
         <!-- Navigation -->
         <nav class="navbar">
             <div class="nav-container">
@@ -313,25 +375,20 @@
 
     <script src="script.js"></script>
     <script>
-        // Add this at the start of your script.js or inline
         document.addEventListener('DOMContentLoaded', () => {
-            // Check if coming from loading screen
-            const fromLoader = sessionStorage.getItem('fromLoader');
-            
-            if (!fromLoader) {
-                // If not coming from loader, redirect to loading.html
-                window.location.href = 'loading.html';
-                return;
-            }
+            const overlay = document.querySelector('.loading-overlay');
+            const content = document.querySelector('.page-content');
 
-            // Clear the flag
-            sessionStorage.removeItem('fromLoader');
-            
-            // Remove loading class and add loaded class
-            document.body.classList.remove('loading');
+            // Simulate loading time
             setTimeout(() => {
-                document.querySelector('.page-transition').classList.add('loaded');
-            }, 100);
+                overlay.classList.add('fade-out');
+                content.classList.add('visible');
+                
+                // Remove overlay after animation
+                setTimeout(() => {
+                    overlay.remove();
+                }, 500);
+            }, 2000);
         });
     </script>
 </body>

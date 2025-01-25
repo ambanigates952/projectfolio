@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
     <meta name="description" content="Loading - Rohit Sharma Portfolio">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="robots" content="noindex, nofollow">
     <link rel="preload" href="index.html" as="document">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <title>Loading...</title>
     <style>
         :root {
@@ -16,14 +18,15 @@
             --text-primary: #fff;
             --text-secondary: rgba(255, 255, 255, 0.8);
             --accent-glow: rgba(255, 255, 255, 0.05);
+            --accent-color: #00ff88;
             --loader-size: clamp(40px, 8vw, 60px);
-            --container-padding: max(20px, 4vw);
+            --container-padding: max(16px, 4vw);
             --card-bg: rgba(255, 255, 255, 0.03);
             --card-border: rgba(255, 255, 255, 0.05);
-            --accent-color: #00ff88;
+            --transition-bezier: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Reset and base styles */
+        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -35,14 +38,14 @@
             margin: 0;
             background: var(--primary-bg);
             overflow: hidden;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
             touch-action: manipulation;
         }
 
-        /* Loading screen container */
+        /* Loading Container */
         .loading-screen {
             position: fixed;
             inset: 0;
@@ -53,12 +56,12 @@
             background: var(--primary-bg);
             z-index: 9999;
             padding: var(--container-padding);
-            min-height: 100dvh; /* Dynamic viewport height */
-            overflow-x: hidden;
+            min-height: 100dvh;
+            overflow: hidden;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Loading sections */
+        /* Loading Sections */
         .loading-section {
             position: absolute;
             inset: 0;
@@ -66,219 +69,71 @@
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.5s var(--transition-bezier);
             will-change: opacity, transform;
             transform: translateZ(0);
             backface-visibility: hidden;
         }
 
-        /* Loader circle */
+        /* Loader Elements */
         .loader-circle {
             width: var(--loader-size);
             height: var(--loader-size);
             border: min(3px, 0.5vw) solid rgba(255, 255, 255, 0.1);
             border-top-color: var(--accent-color);
             border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            animation: spin 1s var(--transition-bezier) infinite;
             will-change: transform;
             transform: translateZ(0);
             box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
         }
 
-        /* Creative text container */
-        .creative-text {
-            text-align: center;
-            color: var(--text-primary);
-            margin-top: min(80px, 15vh);
-            display: flex;
-            flex-direction: column;
-            gap: min(40px, 5vh);
-            max-width: min(90vw, 600px);
-            pointer-events: none;
-            transform: translateZ(0);
-        }
-
-        /* Creative text cards */
-        .creative-text div {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            position: relative;
-            padding: clamp(12px, 2.5vw, 18px) clamp(15px, 3vw, 25px);
-            background: var(--card-bg);
-            border-radius: clamp(12px, 2vw, 16px);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--card-border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            transform: translateZ(0);
-            touch-action: pan-x pan-y;
-        }
-
-        @media (hover: hover) {
-            .creative-text div:hover {
-                transform: translateY(-2px);
-            }
-        }
-
-        /* Emoji styles */
-        .creative-text .emoji {
-            position: absolute;
-            left: clamp(12px, 2.5vw, 18px);
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: clamp(18px, 4vw, 24px);
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
-        }
-
-        /* Text styles */
-        .creative-text .text {
-            font-size: clamp(14px, 2.5vw, 16px);
-            color: var(--text-secondary);
-            font-weight: 400;
-            letter-spacing: 0.3px;
-            line-height: 1.5;
-            margin-left: clamp(35px, 8vw, 45px);
-            text-align: left;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        /* Progress bar */
-        .progress-bar {
-            width: min(280px, 85vw);
-            height: min(4px, 1vh);
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            transform: translateZ(0);
-        }
-
-        .progress {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--text-primary), rgba(255, 255, 255, 0.8));
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: width;
-            transform: translateZ(0);
-        }
-
-        /* Mobile optimization */
-        @media (max-width: 480px) {
-            .creative-text {
-                margin-top: min(50px, 10vh);
-                gap: min(16px, 3vh);
-            }
-
-            .creative-text div {
-                padding: 12px 15px;
-                border-radius: 12px;
-            }
-
-            .creative-text .text {
-                font-size: 14px;
-                margin-left: 32px;
-                line-height: 1.4;
-            }
-
-            .creative-text .emoji {
-                font-size: 16px;
-                left: 10px;
-            }
-        }
-
-        /* Tablet optimization */
-        @media (min-width: 481px) and (max-width: 1024px) {
-            .creative-text {
-                margin-top: min(60px, 12vh);
-                gap: min(24px, 4vh);
-            }
-        }
-
-        /* Landscape mode optimization */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .creative-text {
-                margin-top: 20px;
-                gap: 12px;
-            }
-
-            .creative-text div {
-                padding: 8px 12px;
-            }
-        }
-
-        /* High-DPI screens */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .creative-text div {
-                border-width: 0.5px;
-            }
-        }
-
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            .loader-circle,
-            .creative-text div {
-                animation: none;
-            }
-
-            .creative-text div {
-                opacity: 1;
-                transform: none;
-            }
-
-            .progress,
-            .creative-text div {
-                transition: none;
-            }
-        }
-
-        /* Enhanced Loading Animation */
         .connecting-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: var(--text-primary);
-            font-size: clamp(20px, 4vw, 32px);
+            font-size: clamp(18px, 4vw, 28px);
             font-weight: 500;
-            letter-spacing: 2px;
+            letter-spacing: 0.1em;
             opacity: 0;
             transition: opacity 0.5s ease;
             text-align: center;
-            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
         }
 
         .connecting-text .dots {
-            display: inline-block;
-            width: 24px;
-            text-align: left;
+            display: inline-flex;
+            gap: 2px;
+            margin-left: 4px;
         }
 
         .connecting-text .dot {
             opacity: 0;
             animation: dotFade 1.4s infinite;
-            margin-left: 2px;
         }
 
-        .connecting-text .dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
+        .connecting-text .dot:nth-child(2) { animation-delay: 0.2s; }
+        .connecting-text .dot:nth-child(3) { animation-delay: 0.4s; }
 
-        .connecting-text .dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
+        /* Connection Lines */
         .connection-lines {
             position: absolute;
             inset: 0;
             opacity: 0;
             transition: opacity 0.5s ease;
+            pointer-events: none;
         }
 
         .connection-line {
             position: absolute;
-            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--accent-color) 20%, 
+                var(--accent-color) 80%, 
+                transparent
+            );
             height: 1px;
             width: 100%;
             animation: lineMove 2s linear infinite;
@@ -289,12 +144,36 @@
         .connection-line:nth-child(3) { top: 65%; animation-delay: 1s; }
         .connection-line:nth-child(4) { top: 85%; animation-delay: 1.5s; }
 
+        /* Progress Bar */
+        .progress-bar {
+            width: min(280px, 85vw);
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            transform: translateZ(0);
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), rgba(0, 255, 136, 0.8));
+            transition: width 0.5s var(--transition-bezier);
+            will-change: width;
+            transform: translateZ(0);
+        }
+
+        /* Animations */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @keyframes lineMove {
             0% {
                 transform: translateX(-100%);
                 opacity: 0;
             }
-            50% {
+            20%, 80% {
                 opacity: 1;
             }
             100% {
@@ -307,12 +186,53 @@
             0%, 100% { opacity: 0; }
             50% { opacity: 1; }
         }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .connecting-text {
+                font-size: 16px;
+            }
+
+            .progress-bar {
+                height: 2px;
+            }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .connecting-text {
+                font-size: 14px;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .loader-circle,
+            .connection-line,
+            .connecting-text .dot {
+                animation: none;
+            }
+
+            .progress,
+            .connecting-text,
+            .loading-section {
+                transition: opacity 0.1s ease-out;
+            }
+        }
+
+        /* High DPI Screens */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .progress-bar,
+            .connection-line {
+                transform: translateZ(0);
+            }
+        }
     </style>
 </head>
 <body>
     <noscript>
         <meta http-equiv="refresh" content="0;url=index.html">
     </noscript>
+
     <div class="loading-screen">
         <div class="connection-lines">
             <div class="connection-line"></div>
@@ -327,25 +247,8 @@
                 CONNECTING<span class="dots"><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></span>
             </div>
         </div>
-        
+
         <div class="loading-section" id="section2">
-            <div class="creative-text">
-                <div>
-                    <span class="emoji">⚡</span>
-                    <span class="text">Making pixels dance & functions sing</span>
-                </div>
-                <div>
-                    <span class="emoji">✨</span>
-                    <span class="text">Crafting UIs that spark joy</span>
-                </div>
-                <div>
-                    <span class="emoji">🎨</span>
-                    <span class="text">404: Bad designs not found</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="loading-section" id="section3">
             <div class="progress-bar">
                 <div class="progress"></div>
             </div>
@@ -369,9 +272,11 @@
             sessionStorage.setItem('fromLoader', 'true');
             
             // Initial state
-            sections[0].style.opacity = '1';
-            connectingText.style.opacity = '1';
-            connectionLines.style.opacity = '1';
+            requestAnimationFrame(() => {
+                sections[0].style.opacity = '1';
+                connectingText.style.opacity = '1';
+                connectionLines.style.opacity = '1';
+            });
             
             // Loading sequence
             setTimeout(() => {
@@ -379,13 +284,8 @@
                 connectionLines.style.opacity = '0';
                 sections[0].style.opacity = '0';
                 sections[1].style.opacity = '1';
-            }, 2000);
-            
-            setTimeout(() => {
-                sections[1].style.opacity = '0';
-                sections[2].style.opacity = '1';
                 progress.style.width = '100%';
-            }, 4000);
+            }, 2500);
             
             setTimeout(() => {
                 document.body.style.opacity = '0';
@@ -394,7 +294,7 @@
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 300);
-            }, 5000);
+            }, 4000);
         }, { passive: true });
     </script>
 </body>
